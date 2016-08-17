@@ -2,6 +2,11 @@ var path = require('path');
 
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database
 // SQLite 	DATABASE_URL = sqlite://:@:/
+
+if (process.env.DATABASE_URL === undefined) {
+	process.env.DATABASE_URL = 'postgres://xurceqcghyaotc:gvPlUmxXvlPeDd_Vzr_eASs1J2@ec2-54-75-237-218.eu-west-1.compute.amazonaws.com:5432/d68rp1iqjlcu1b?ssl=true';
+}
+
 var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
 var DB_name  = (url[6]||null);
 var user     = (url[2]||null);
@@ -10,6 +15,7 @@ var protocol = (url[1]||null);
 var dialect  = (url[1]||null);
 var port     = (url[5]||null);
 var host     = (url[4]||null);
+// var storage  = process.env.DATABASE_STORAGE;
 var storage  = process.env.DATABASE_STORAGE;
 
 // Cargar modelo ORM
@@ -22,7 +28,8 @@ var sequelize = new Sequelize(DB_name, user, pwd,
     port:     port,
     host:     host,
     storage:  storage,  // solo SQLite (.env)
-    omitNull: true      // solo Postgres
+    omitNull: true,      // solo Postgres
+    ssl: true
   }
 );
 
