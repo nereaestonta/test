@@ -64,6 +64,11 @@ exports.new = function(req, res) {
 	res.render('quizes/new', { quiz: quiz, errors: [] });
 };
 
+// GET /author
+exports.author = function(req, res){
+	res.render('author', { errors: [] });
+};
+
 // GET /quizes/:id/edit
 exports.edit = function(req, res) {
 	var quiz = req.quiz; 		// autoload de la instancia de quiz
@@ -113,4 +118,31 @@ exports.destroy = function(req, res) {
 	req.quiz.destroy().then(function() {
 		res.redirect('/quizes');
 	}).catch(function(error) { next(error) });
+};
+
+// GET /quizes/statistics
+exports.statistics = function(req, res) {
+	var questionsAmount = 0;
+	var hasComments = 0;
+	models.Quiz.count().then(
+		function(questionsAmountN) {
+			questionsAmount = questionsAmountN;
+			return models.Comment.count();
+		}
+	).then(
+		function(commentsAmountN) {
+			commentsAmount = commentsAmountN;
+			return models.Comment.questionsWithComments();
+		}
+	).then(
+		function(hasCommentsN) {
+			hasComments = hasCommentsN;
+		}
+	).catch(
+		function(error) { next(error); }
+	).finally(function() {
+		var commentsMedia = (commentsAmount / questionsAmount).toFixed(2);
+		var withoutComments = questionsAmount - commentsAmount;
+		res.render('statistics', { questionsAmount: questionsAmount, commentsAmount: commentsAmount, commentsMedia: commentsMedia, withoutComments: withoutComments, hasComments: hasComments, errors: [] });
+	});
 };
