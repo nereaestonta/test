@@ -1,1 +1,5 @@
-<p>Tienes que logarte para ver algo... <a href="/login">Login</a></p>
+<% if (!session.user) { %>
+	<p>Tienes que logarte para ver algo... <a href="/login">Login</a></p>
+<% } else { %>
+	<small>Si has publicado un comentario y no aparece aquí es porque está pendiente de moderación. Debes <a href="/login">iniciar sesión</a> para moderar comentarios. Gracias.</small>
+<% } %>
