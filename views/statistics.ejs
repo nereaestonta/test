@@ -1,0 +1,107 @@
+<h3>Página de estadísticas</h3>
+<p>El número total de preguntas es: <strong><%= questionsAmount %></strong></p>
+<p>El número total de comentarios es: <strong><%= commentsAmount %></strong></p>
+<p>El número medio de comentarios por pregunta es: <strong><%= commentsMedia %></strong></p>
+<p>El número de preguntas sin comentarios es: <strong><%= withoutComments %></strong></p>
+<p>El número de preguntas con comentarios es: <strong><%= hasComments %></strong></p>
+
+<script src="/javascripts/jquery.js"></script>
+<script src="/javascripts/highcharts.js"></script>
+
+<div class="barChart"></div>
+<div class="pieChart"></div>
+
+<script type="text/javascript">
+$(function () {
+	$('.barChart').highcharts({
+		chart: {
+			type: 'column'
+		},
+		title: {
+			text: 'Estadísticas'
+		},
+		subtitle: {
+			text: 'Preguntas y comentarios de Quiz'
+		},
+		xAxis: {
+			type: 'category'
+		},
+		yAxis: {
+			title: 'Totales'
+		},
+		legend: {
+			enabled: false
+		},
+		plotOptions: {
+			series: {
+				borderWidth: 0,
+				dataLabels: {
+					enabled: true,
+					format: '{point.y}'
+				},
+				colors: ['#f00', '#00f', '#ff0', '#0f0', '#7f007f']
+			}
+		},
+		tooltip: {
+			headerFormat: '<span></span>',
+			pointFormat: '<span style="color:{point.color}">{point.name}:</span> <b>{point.y}</b>'
+		},
+		series: [{
+			colorByPoint: true,
+			data: [{
+				name: "Preguntas",
+				y: <%= questionsAmount %>
+			}, {
+				name: "Comentarios",
+				y: <%= commentsAmount %>
+			}, {
+				name: "Media de comentarios",
+				y: <%= commentsMedia %>
+			}, {
+				name: "Preguntas sin comentarios",
+				y: <%= withoutComments %>
+			}, {
+				name: "Preguntas con comentarios",
+				y: <%= hasComments %>
+			}]
+		}]
+	});
+	Highcharts.setOptions({
+		colors: ['#f00', '#0f0']
+	});
+	$('.pieChart').highcharts({
+		chart: {
+			type: 'pie'
+		},
+		title: {
+			text: 'Comentarios en Preguntas'
+		},
+		subtitle: {
+			text: 'Número total de preguntas: ' + <%= questionsAmount %>
+		},
+		tooltip: {
+			headerFormat: '<span></span>',
+			pointFormat: '<span style="color:{point.color}">{point.name}:</span> <b>{point.y}</b>'
+		},
+		plotOptions: {
+			pie: {
+				allowPointSelect: true,
+				cursor: 'pointer',
+				dataLabels: {
+					enabled: true,
+					format: '<b>{point.name}</b>: {point.y}'
+				}
+			}
+		},
+		series: [{
+			data: [{
+				name: "Preguntas <br />sin comentarios",
+				y: <%= withoutComments %>
+			}, {
+				name: "Preguntas <br />con comentarios",
+				y: <%= hasComments %>
+			}]
+		}]
+	});
+});
+</script>

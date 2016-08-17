@@ -1,0 +1,26 @@
+<form method="get" action="/quizes/<%= quiz.id %>/answer">
+	<p>Pregunta: <%= quiz.pregunta %></p>
+	<input type="text" name="respuesta" placeholder="Responda aquí" />
+	<input type="submit" value="Enviar" />
+</form>
+
+<p><a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a></p>
+
+<% if (quiz.Comments.length) { %>
+<p><strong>Comentarios:</strong></p>
+<% } else { %>
+<p>Aún no hay comentarios. Sé el primero en comentar.</p>
+<% } %>
+<% for (index in quiz.Comments) { %>
+	<% if (quiz.Comments[index].publicado || session.user) { %>
+	<p>- <%= quiz.Comments[index].texto %>
+	<% if (session.user && !quiz.Comments[index].publicado) { %>
+		<a href="/quizes/<%= quiz.id %>/comments/<%= quiz.Comments[index].id %>/publish"><button>Publicar</button></a>
+	<% } %>
+	</p>
+	<% } %>
+<% } %>
+<br />
+<% if (!session.user) { %>
+	<small>Si has publicado un comentario y no aparece aquí es porque está pendiente de moderación. Debes <a href="/login">iniciar sesión</a> para moderar comentarios. Gracias.</small>
+<% } %>
