@@ -1,5 +1,33 @@
 <% if (!session.user) { %>
 	<p>Tienes que logarte para ver algo... <a href="/login">Login</a></p>
 <% } else { %>
-	<small>Si has publicado un comentario y no aparece aquí es porque está pendiente de moderación. Debes <a href="/login">iniciar sesión</a> para moderar comentarios. Gracias.</small>
+	<p>Ves esto porque estás logado.</p>
+
+
+
+
+<form method="get" action="/quizes">
+	<p>Búsqueda de preguntas</p>
+	<input type="text" name="search" placeholder="Búsqueda" value="" />
+	<input type="submit" value="Buscar" />
+</form>
+
+<table cellpadding="0" cellspacing="0">
+	<thead>
+		<tr>
+			<th>Pregunta</th>
+			<th>Índice temático</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% var i; for (i = 0; i < quizes.length; i++) { %>
+			<tr>
+				<td><a href="quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %></a></td>
+				<td><%= quizes[i].tema %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+
+
 <% } %>
