@@ -20,7 +20,7 @@ router.post('/login', 						sessionController.create);
 router.get('/logout', 						sessionController.destroy);
 
 // Definición de rutas de /quizes
-router.get('/quizes',                      	quizController.index);
+router.get('/',                     	 	quizController.index);
 router.get('/quizes/:quizId(\\d+)',        	quizController.show);
 router.get('/quizes/:quizId(\\d+)/answer', 	quizController.answer);
 router.get('/quizes/new', 					sessionController.loginRequired, quizController.new);

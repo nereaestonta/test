@@ -1,33 +1,52 @@
 <% if (!session.user) { %>
 	<p>Tienes que logarte para ver algo... <a href="/login">Login</a></p>
+
+	<h2>Login</h2>
+	<form method='POST' action='/login'>
+		<div class="field">
+			<label for="login">Login:</label><br />
+			<input type="text" id="login" name="login" size="30" />
+		</div>
+		<div class="field">
+			<label for="password">Password:</label><br />
+			<input type="password" id="password" name="password" size="30" />
+		</div>
+		<div class="actions">
+			<input name="commit" type="submit" value="Login" />
+		</div>
+	</form>
+
 <% } else { %>
 	<p>Ves esto porque estás logado.</p>
 
-
-
-
-<form method="get" action="/quizes">
-	<p>Búsqueda de preguntas</p>
-	<input type="text" name="search" placeholder="Búsqueda" value="" />
-	<input type="submit" value="Buscar" />
-</form>
-
-<table cellpadding="0" cellspacing="0">
-	<thead>
-		<tr>
-			<th>Pregunta</th>
-			<th>Índice temático</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% var i; for (i = 0; i < quizes.length; i++) { %>
+	<table cellpadding="0" cellspacing="0">
+		<thead>
 			<tr>
-				<td><a href="quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %></a></td>
-				<td><%= quizes[i].tema %></td>
+				<th>Pregunta</th>
+				<th>Índice temático</th>
+				<% if (session.user) { %>
+				<th colspan="2">Acciones</th>
+				<% } %>
 			</tr>
-		<% } %>
-	</tbody>
-</table>
-
+		</thead>
+		<tbody>
+			<% var i; for (i = 0; i < quizes.length; i++) { %>
+				<tr>
+					<td><a href="quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %></a></td>
+					<td><%= quizes[i].tema %></td>
+					<% if (session.user) { %>
+					<td><a href="quizes/<%= quizes[i].id %>/edit"><button>Editar</button></a></td>
+					<td>
+						<form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
+							<button type="submit" onClick="return confirm('Borrar: <%= quizes[i].pregunta %>');">
+								Borrar
+							</button>
+						</form>
+					</td>
+					<% } %>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
 
 <% } %>
